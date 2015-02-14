@@ -3,7 +3,6 @@
 
 /* universal */
 
-$light_gray #777
 
 html {
   overflow-y: scroll;
@@ -30,6 +29,8 @@ textarea {
 }
 
 /* typography */
+
+$light_gray: #777;
 
 h1, h2, h3, h4, h5, h6 {
   line-height: 1;
