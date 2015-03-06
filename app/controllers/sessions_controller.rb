@@ -1,6 +1,9 @@
 class SessionsController < ApplicationController
-  include SessionsHelper
   
+  def destroy
+    logout
+    redirect_to root_path
+  end  
   
   def new
     
@@ -24,4 +27,6 @@ class SessionsController < ApplicationController
     params.require(:session).permit(:email, :password)
   end
   
+
+  #
 end
