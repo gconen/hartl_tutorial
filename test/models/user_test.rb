@@ -59,5 +59,8 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
   
+  test 'authenticated? should fail gracefully if no digest present' do
+    assert_not @user.authenticated?('asdf')
+  end
 
 end

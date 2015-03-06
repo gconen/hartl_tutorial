@@ -33,5 +33,12 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
        assert_select 'a[href=?]', logout_path, count: 0
        assert_select 'a[href=?]', user_path(@user), count: 0
    end
-
+   
+    test "gracefully handles logout twice" do
+        post login_path session: {email: @user.email, password: 'password'}
+        follow_redirect!
+        delete logout_path
+        delete logout_path
+    end
+ 
 end
