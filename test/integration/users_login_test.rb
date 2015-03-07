@@ -40,5 +40,15 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
         delete logout_path
         delete logout_path
     end
- 
+    
+    test 'login with remembering' do
+        login_as @user, remember_me: '1'
+        assert_not_nil cookies['remember_token']
+    end
+    
+    test 'login without remembering' do
+        login_as @user, remember_me: '0'
+        assert_nil cookies['remember_token']
+    end
+        
 end
