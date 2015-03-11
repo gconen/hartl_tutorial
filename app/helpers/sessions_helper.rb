@@ -9,6 +9,7 @@ module SessionsHelper
         if session[:user_id]
             @current_user ||= User.find_by(id: session[:user_id])
         elsif cookies[:user_id]
+            #raise
             user = User.find_by(id: cookies.signed[:user_id])
             if user && user.authenticated?(cookies[:remember_token])
                 login user
