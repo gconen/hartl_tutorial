@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :check_logged_in_user, only: [:edit, :update]
+  
   def new
   end
   
@@ -34,7 +36,8 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user.update_attributes(user_params)
-      #do things
+      flash[:success] = "Thank you for updating your information"
+      redirect_to @user
     else
       render 'edit'
     end
@@ -45,6 +48,13 @@ class UsersController < ApplicationController
   
     def user_params
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+    
+    def check_logged_in_user
+      unless logged_in?
+        flash[:danger] = "Please log in to access that page"
+        redirect_to login_url
+      end
     end
   
 end
