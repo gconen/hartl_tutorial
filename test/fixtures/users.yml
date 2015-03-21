@@ -8,7 +8,12 @@ other_user:
     name: "Ann Other"
     email: "other@example.com"
     password_digest: <%= User.digest('password') %>
-    
+
+admin_user:
+    name: "Admin"
+    email: "admin@test.com"
+    password_digest: <%= User.digest('password') %>
+    admin: true
     
     
 <% 30.times do |n| %>

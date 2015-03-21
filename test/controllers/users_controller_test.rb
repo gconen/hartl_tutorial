@@ -4,6 +4,7 @@ class UsersControllerTest < ActionController::TestCase
   def setup
     @user = users(:test_user)
     @other_user = users(:other_user)
+    @admin = users(:admin_user)
   end
   
   test "should get new" do
@@ -43,4 +44,25 @@ class UsersControllerTest < ActionController::TestCase
     assert_redirected_to root_url
   end
   
+  test "non-admins should not be able to delete users" do
+    assert_no_difference 'User.count' do
+      delete :destroy, id: @user
+    end
+    assert_redirected_to root_url
+    login_as(@other_user)
+    assert_no_difference 'User.count' do
+      delete :destroy, id: @user
+    end
+    assert_redirected_to root_url
+  end
+  
+  test "admins delete users" do
+    login_as(@admin)
+    assert_difference 'User.count', -1 do
+      delete :destroy, id: @user
+    end
+    assert_redirected_to users_url
+  end
+
+
 end

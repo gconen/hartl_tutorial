@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :check_logged_in_user, only: [:edit, :update, :index]
   before_action :check_correct_user, only: [:edit, :update]
+  before_action :check_admin_status, only: [:destroy]
   
   def new
   end
@@ -43,7 +44,12 @@ class UsersController < ApplicationController
       render 'edit'
     end
   end
-
+  
+  def destroy
+    User.find(params[:id]).destroy
+    flash[:success] = "User Deleted"
+    redirect_to users_url
+  end
   
   private
   
@@ -62,6 +68,13 @@ class UsersController < ApplicationController
     def check_correct_user
       unless current_user?(User.find(params[:id])) && !(current_user.admin?)
         flash[:danger] = "You can only edit your own page!"
+        redirect_to root_url
+      end
+    end
+    
+    def check_admin_status
+      unless current_user && current_user.admin? # have to check if current user exists
+        flash[:danger] = "No."                  #if current user is nil get an error for current_user.admin?
         redirect_to root_url
       end
     end
