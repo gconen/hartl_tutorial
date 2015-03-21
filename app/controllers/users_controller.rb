@@ -60,7 +60,7 @@ class UsersController < ApplicationController
     end
     
     def check_correct_user
-      unless current_user?(User.find(params[:id]))
+      unless current_user?(User.find(params[:id])) && !(current_user.admin?)
         flash[:danger] = "You can only edit your own page!"
         redirect_to root_url
       end
