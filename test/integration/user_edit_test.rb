@@ -61,4 +61,11 @@ class UserEditTest < ActionDispatch::IntegrationTest
     assert_equal @user.email, email
     assert_not BCrypt::Password.new(@user.password_digest).is_password?("")
   end
+  
+  test "friendly forwarding works properly" do
+    get edit_user_path(@user)
+    login_as(@user)
+    assert_redirected_to edit_user_path(@user)
+  end
+  
 end

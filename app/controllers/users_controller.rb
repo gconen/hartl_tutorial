@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :check_logged_in_user, only: [:edit, :update]
+  before_action :check_correct_user, only: [:edit, :update]
   
   def new
   end
@@ -53,7 +54,15 @@ class UsersController < ApplicationController
     def check_logged_in_user
       unless logged_in?
         flash[:danger] = "Please log in to access that page"
+        store_destination
         redirect_to login_url
+      end
+    end
+    
+    def check_correct_user
+      unless current_user?(User.find(params[:id]))
+        flash[:danger] = "You can only edit your own page!"
+        redirect_to root_url
       end
     end
   
