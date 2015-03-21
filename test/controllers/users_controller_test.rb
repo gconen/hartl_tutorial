@@ -22,6 +22,12 @@ class UsersControllerTest < ActionController::TestCase
     assert_not flash.empty?
     assert_redirected_to login_url
   end
+  
+  test "index should, for some reason, not be available if not logged in" do
+    get :index
+    assert_not flash.empty?
+    assert_redirected_to login_url
+  end
 
   test "edit should not be available to the wrong user" do
     login_as(@other_user)
