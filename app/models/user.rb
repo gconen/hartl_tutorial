@@ -1,5 +1,8 @@
 class User < ActiveRecord::Base
     before_save { self.email = email.downcase }
+    before_create :create_activation_digest
+    
+    
     validates :name, presence: true, length: {maximum: 99}
     VALID_EMAIL_REGEXP = /\A[\w+\-.]+@[a-z\d.\-]+\.[a-z]+\Z/i
     validates :email, presence: true, length: {maximum: 254}, format: { with: VALID_EMAIL_REGEXP }, uniqueness: {case_sensitive: false}
@@ -8,6 +11,7 @@ class User < ActiveRecord::Base
     
     
     attr_accessor :remember_token
+    attr_accessor :activation_token
     
     def User.digest(password)
         cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -34,5 +38,13 @@ class User < ActiveRecord::Base
             BCrypt::Password.new(remember_digest).is_password?(remember_token)
         end
     end
+    
+    
+    private
+    
+        def create_activation_digest
+            self.activation_token = User.new_token
+            self.activation_digest =  User.digest(activation_token)
+        end
     
 end
