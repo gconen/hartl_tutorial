@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
     
     
     attr_accessor :remember_token
-    attr_accessor :activation_token
+    attr_accessor :activation_token, :reset_token
     
     def User.digest(password)
         cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
@@ -47,6 +47,17 @@ class User < ActiveRecord::Base
     
     def send_activation_email
         UserMailer.account_activation(self).deliver_now
+    end
+    
+    def create_reset_token
+        self.reset_token = User.new_token
+        digest = User.digest(token)
+        update_attribute(reset_digest: digest)
+        update_attribute(reset_at: Time.zone.now)
+    end
+    
+    def send_reset_email
+        UserMailer.reset_password(self).deliver_now
     end
     
     private
