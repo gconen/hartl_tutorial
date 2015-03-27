@@ -1,0 +1,5 @@
+UserMailer#account_activation
+
+Hello <%= @user.name %>, 
+
+Please activate your account by going to <%= edit_account_activation_url(@user.activation_token, email: @user.email) %>.
