@@ -21,14 +21,14 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
-      flash[:success] = 'Welcome to the Sample App'
-      login(@user)
-      redirect_to @user
+      UserMailer.account_activation(@user).deliver_now
+      flash[:info] = "Check your email account for an activation email"
+      redirect_to root_url
     else
       render 'new'
     end
-    
   end
+
   
   def edit
     @user = User.find(params[:id])

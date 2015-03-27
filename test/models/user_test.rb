@@ -60,7 +60,7 @@ class UserTest < ActiveSupport::TestCase
   end
   
   test 'authenticated? should fail gracefully if no digest present' do
-    assert_not @user.authenticated?('asdf')
+    assert_not @user.authenticated?('asdf', :remember)
   end
 
 end

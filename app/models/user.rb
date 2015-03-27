@@ -33,12 +33,17 @@ class User < ActiveRecord::Base
         update_attribute(:remember_digest, nil)
     end
     
-    def authenticated?(remember_token)
-        if remember_digest
-            BCrypt::Password.new(remember_digest).is_password?(remember_token)
+    def authenticated?(token, attribute = :remember) #if you do it this way, with a default value, you don't break existing code
+        digest = self.send("#{attribute}_digest")
+        if digest
+            BCrypt::Password.new(digest).is_password?(token)
         end
     end
     
+    def activate
+        update_attribute(:activated, true)
+        update_attribute(:activated_at, Time.zone.now
+    end
     
     private
     
