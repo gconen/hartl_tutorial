@@ -61,7 +61,8 @@ class User < ActiveRecord::Base
     end
     
     def password_reset_expired?
-        if reset_at < 2.hours.ago
+        reset_at < 2.hours.ago
+    end
     
     private
     
