@@ -51,14 +51,17 @@ class User < ActiveRecord::Base
     
     def create_reset_token
         self.reset_token = User.new_token
-        digest = User.digest(token)
-        update_attribute(reset_digest: digest)
-        update_attribute(reset_at: Time.zone.now)
+        digest = User.digest(reset_token)
+        update_attribute(:reset_digest, digest)
+        update_attribute(:reset_at, Time.zone.now)
     end
     
     def send_reset_email
-        UserMailer.reset_password(self).deliver_now
+        UserMailer.password_reset(self).deliver_now
     end
+    
+    def password_reset_expired?
+        if reset_at < 2.hours.ago
     
     private
     
