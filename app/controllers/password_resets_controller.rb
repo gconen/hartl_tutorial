@@ -24,10 +24,10 @@ class PasswordResetsController < ApplicationController
   end
   
   def create
-    user = User.find_by(email: params[:password_reset][:email].downcase)
-    if user
-      user.create_reset_token
-      user.send_reset_email
+    @user = User.find_by(email: params[:password_reset][:email].downcase) #This WORKS fine with a local instead of an instance variable
+    if @user                                                  #but the tests don't work
+      @user.create_reset_token
+      @user.send_reset_email
       flash[:info] = "Reset email sent"
       redirect_to root_url
     else
@@ -40,7 +40,7 @@ class PasswordResetsController < ApplicationController
     if password_blank?
       flash.now[:danger] = "Password can't be blank"
       render 'edit'
-    elsif @user.update_attributes(password_reset_params)
+    elsif @user.update_attributes(password_reset_params)#
       login @user
       flash[:success] = "Password has been changed"
       redirect_to @user
@@ -56,7 +56,7 @@ class PasswordResetsController < ApplicationController
     end
   
     def password_reset_params
-      params.require(:user).permit([:password, :password_reset])
+      params.require(:user).permit([:password, :password_confirmation])
     end
     
 end

@@ -36,10 +36,29 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     #correct link
     get edit_password_reset_path(user.reset_token, email: @user.email)
     assert_template 'password_resets/edit'
-    assert_select 'input[name=email][type=hidden][value=?]'
+    assert_select 'input[name=email][type=hidden]'
     #invalid password and confirmation
-    
-    
+    patch password_reset_path(user.reset_token),
+          email: user.email,
+          user: { password:              "password",
+                  password_confirmation: "doesntmatch" }
+    assert_select 'div#error_explanation'
+    #blank password
+    patch password_reset_path(user.reset_token),
+          email: user.email,
+          user: { password:              "    ",
+                  password_confirmation:  "    " }
+    assert_not flash.empty?
+    assert_template "password_resets/edit"
+    #changes password
+    patch password_reset_path(user.reset_token),
+          email: user.email,
+          user: { password:              "differentpassword",
+                  password_confirmation:  "differentpassword" }
+    assert_not flash.empty?
+    assert is_logged_in?
+    assert_redirected_to user
+    assert_not_equal @user.password_digest, @user.reload.password_digest
   end
 
   
