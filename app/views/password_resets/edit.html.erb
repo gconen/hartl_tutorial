@@ -5,7 +5,7 @@
     <div class = "col-md-6 col-md-offset-3">
         <%= form_for(@user, url: password_reset_path(params[:id])) do |f| %> 
                     
-            <!-- Important: password_reset_path(token) not password_resets_path(token -->
+            <!-- Important: password_reset_path(token) not password_resets_path(token) -->
                     
             <%= render 'shared/error_messages' %>
             
