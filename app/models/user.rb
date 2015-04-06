@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
     before_save { self.email = email.downcase }
     before_create :create_activation_digest
     
+    has_many :microposts
     
     validates :name, presence: true, length: {maximum: 99}
     VALID_EMAIL_REGEXP = /\A[\w+\-.]+@[a-z\d.\-]+\.[a-z]+\Z/i
