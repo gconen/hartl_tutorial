@@ -62,5 +62,13 @@ class UserTest < ActiveSupport::TestCase
   test 'authenticated? should fail gracefully if no digest present' do
     assert_not @user.authenticated?('asdf', :remember)
   end
+  
+  test "associated microposts should be destoyed with user" do
+    @user.save
+    @user.microposts.create!(content: "Not Relevant")
+    assert_difference 'Micropost.count', -1 do
+      @user.destroy
+    end
+  end
 
 end
