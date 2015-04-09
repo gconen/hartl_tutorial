@@ -5,7 +5,7 @@ class Micropost < ActiveRecord::Base
     
     validates :user_id, presence: true
     validates :content, presence: true, length: {maximum: 140}
-    validate :picture_size
+    validate :picture_size #validate not validates; validates fails in arcane, opaque ways that makes it hard to track down the source of the problem.
     
     default_scope -> {order(created_at: :desc)}
     
