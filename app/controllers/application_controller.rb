@@ -7,4 +7,14 @@ class ApplicationController < ActionController::Base
     render text:"hello world"
   end
   
+  private
+  
+    def check_logged_in_user
+      unless logged_in?
+        flash[:danger] = "Please log in to access that page"
+        store_destination
+        redirect_to login_url
+      end
+    end
+  
 end
