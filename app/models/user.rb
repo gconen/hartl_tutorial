@@ -3,6 +3,14 @@ class User < ActiveRecord::Base
     before_create :create_activation_digest
     
     has_many :microposts, dependent: :destroy
+    has_many :active_relationships, class_name:  "Relationship",
+                                  foreign_key: "follower_id",
+                                  dependent:   :destroy
+    has_many :passive_relationships, class_name:  "Relationship",
+                                   foreign_key: "followed_id",
+                                   dependent:   :destroy
+    has_many :following, through: :active_relationships, source: :followed
+    has_many :followers, through: :passive_relationships, source: :follower
     
     validates :name, presence: true, length: {maximum: 99}
     VALID_EMAIL_REGEXP = /\A[\w+\-.]+@[a-z\d.\-]+\.[a-z]+\Z/i
@@ -67,6 +75,23 @@ class User < ActiveRecord::Base
     
     def feed
         Micropost.where("user_id = ?", id)
+    end
+    
+    # Follows a user.
+    def follow(other_user)
+        unless following?(other_user) #fails gracefully if the user is alreadying following the other user
+            active_relationships.create(followed_id: other_user.id)
+        end
+    end
+
+    # Unfollows a user.
+    def unfollow(other_user)
+        active_relationships.find_by(followed_id: other_user.id).destroy
+    end
+
+    # Returns true if the current user is following the other user.
+    def following?(other_user)
+        following.include?(other_user)
     end
     
     private
