@@ -46,3 +46,24 @@ van:
   content: "Dude, this van's, like, rolling probable cause."
   created_at: <%= 4.hours.ago %>
   user: lana
+  
+alice_post:
+  content: "Hi, I'm Alice"
+  created_at: <%= 3.days.ago %>
+  user: alice
+
+bob_post:
+  content: "Hi, I'm Bob"
+  created_at: <%= 3.days.ago %>
+  user: bob
+
+carol_post:
+  content: "Hi, I'm Carol"
+  created_at: <%= 3.days.ago %>
+  user: carol
+
+doug_post:
+  content: "I AM ETERNAL!"
+  created_at: <%= 3.days.ago %>
+  user: doug
+
